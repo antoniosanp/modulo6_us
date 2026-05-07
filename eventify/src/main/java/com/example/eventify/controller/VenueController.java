@@ -1,5 +1,6 @@
 package com.example.eventify.controller;
 
+
 import com.example.eventify.model.Venue;
 import com.example.eventify.service.VenueService;
 import org.springframework.web.bind.annotation.*;
@@ -22,4 +23,5 @@ public class VenueController {
     public Venue postVenue(@RequestBody Venue venue){
         return venueService.addVenue(venue);
     }
+
 }
