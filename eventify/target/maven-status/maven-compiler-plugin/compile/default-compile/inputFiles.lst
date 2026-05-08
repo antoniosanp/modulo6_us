@@ -1,0 +1,16 @@
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/EventifyApplication.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/config/AppConfig.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/config/SwaggerConfig.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/controller/EventController.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/controller/VenueController.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/dto/ApiResponse.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/dto/ErrorResponse.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/exception/GlobalExceptionHandler.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/exception/ResourceNotFoundException.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/exception/ValidationException.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/model/Event.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/model/Venue.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/repository/EventRepository.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/repository/VenueRepository.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/service/EventService.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/service/VenueService.java
