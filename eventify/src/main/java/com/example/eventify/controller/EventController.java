@@ -16,7 +16,7 @@ public class EventController {
     public EventController(EventService eventService){this.eventService = eventService;}
     @Operation( summary = "Obtener evento por id", description = "retorna un evento")
     @ApiResponse(responseCode = "200", description = "operación exitosa")
-    @GetMapping({"/id"})
+    @GetMapping({"/{id}"})
     public Event getEvent(@PathVariable int id){
         return eventService.getEventById(id);
     }
