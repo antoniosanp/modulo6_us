@@ -4,9 +4,10 @@ import com.example.eventify.model.Event;
 import com.example.eventify.model.Venue;
 import com.example.eventify.repository.EventRepository;
 import com.example.eventify.repository.VenueRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.boot.CommandLineRunner;
 
 import java.time.LocalDate;
 
@@ -15,12 +16,15 @@ public class AppConfig {
 
     @Bean
     public CommandLineRunner loadData(
+            @Value("${app.seed.enabled:true}") boolean seedEnabled,
             EventRepository eventRepository,
             VenueRepository venueRepository) {
 
         return args -> {
+            if (!seedEnabled) {
+                return;
+            }
 
-            // VENUES
             Venue venue1 = new Venue();
             venue1.setId(1);
             venue1.setName("Medellin Arena");
@@ -36,8 +40,6 @@ public class AppConfig {
             venueRepository.addVenue(venue1);
             venueRepository.addVenue(venue2);
 
-
-            // EVENTS
             Event event1 = new Event();
             event1.setId(1);
             event1.setName("Rock Concert");
@@ -52,7 +54,6 @@ public class AppConfig {
 
             eventRepository.addEvent(event1);
             eventRepository.addEvent(event2);
-
         };
     }
 }
