@@ -1,6 +1,8 @@
 package com.example.eventify.service;
 
 import com.example.eventify.dto.EventDTO;
+import com.example.eventify.exception.ResourceNotFoundException;
+import com.example.eventify.exception.ValidationException;
 import com.example.eventify.model.Event;
 import com.example.eventify.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +16,10 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
-    Event addEvent(EventDTO eventDTO){
+    public Event addEvent(EventDTO eventDTO){
         Event e = eventRepository.findByName(eventDTO.getName());
 
-        if (e != null){throw new RuntimeException("Ya hay un evento con este nombre");}
+        if (e != null){throw new ValidationException("test");}
         Event eNew = new Event();
         eNew.setName(eventDTO.getName());
         eNew.setEventDate(eventDTO.getEventDate());
@@ -27,11 +29,25 @@ public class EventService {
         return eventRepository.save(eNew);
     }
 
-    List<Event> getAllEvents(){
+    public List<Event> getAllEvents(){
+        List<Event> l = eventRepository.findAll();
+        if (l.isEmpty()){throw new ResourceNotFoundException("no hay eventos");
+        }
 
-        return eventRepository.findAll();
+        return l;
+    }
+    public void deleteAll(){
+        eventRepository.deleteAll();
     }
 
-    
+    public Event getEventById(Integer id){
+        Event e = eventRepository.findById(id).orElse(null);
+
+        if (e == null) { throw new ResourceNotFoundException("no hay un evento con ese id");}
+        return e;
+        
+    }
+
+
 
 }

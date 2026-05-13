@@ -1,49 +1,51 @@
 package com.example.eventify.controller;
 
-import com.example.eventify.dto.ApiResponse;
+import com.example.eventify.dto.EventDTO;
 import com.example.eventify.model.Event;
 import com.example.eventify.service.EventService;
-import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/events")
+@RequiredArgsConstructor
 public class EventController {
 
     private final EventService eventService;
 
-    public EventController(EventService eventService) {
-        this.eventService = eventService;
+    @GetMapping()
+    public ResponseEntity<List<Event>> getAllEventos(){
+
+        return ResponseEntity.ok().body(eventService.getAllEvents());
     }
 
-    @Operation(summary = "Listar todos los eventos", description = "Retorna el catalogo completo de eventos")
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<Event>>> getAllEvents() {
-        List<Event> events = eventService.getAllEvents();
-        return ResponseEntity.ok(ApiResponse.success("Eventos consultados correctamente", events));
+    @PostMapping()
+    public ResponseEntity<Event> createEvent(@RequestBody EventDTO eventDTO){
+        if(eventService.addEvent(eventDTO) != null)  return ResponseEntity.status(HttpStatus.CREATED).build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+
     }
 
-    @Operation(summary = "Obtener evento por id", description = "Retorna un evento especifico")
+    @DeleteMapping()
+    public ResponseEntity<Event> deleteAll(){
+        eventService.deleteAll();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Event>> getEvent(@PathVariable int id) {
-        Event event = eventService.getEventById(id);
-        return ResponseEntity.ok(ApiResponse.success("Evento encontrado correctamente", event));
+    public ResponseEntity<Event> getById(@PathVariable Integer id){
+        Event e = eventService.getEventById(id);
+
+        return ResponseEntity.ok(e);
+
+
+
     }
 
-    @Operation(summary = "Registrar nuevo evento", description = "Crea un nuevo evento en memoria")
-    @PostMapping
-    public ResponseEntity<ApiResponse<Event>> postEvent(@RequestBody Event event) {
-        Event savedEvent = eventService.addEvent(event);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Evento registrado correctamente", savedEvent));
-    }
+
 }
