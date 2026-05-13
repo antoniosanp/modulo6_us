@@ -17,5 +17,5 @@ public class EventDTO {
 
     @NotBlank(message = "La descripción es obligatoria")
     private String description;
-    
+
 }

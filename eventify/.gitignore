@@ -40,3 +40,5 @@ out/
 
 /src/main/resources/application.properties
 *.properties
+application.properties
+target/
