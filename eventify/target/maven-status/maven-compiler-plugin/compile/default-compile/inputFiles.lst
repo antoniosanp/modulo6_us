@@ -5,6 +5,8 @@
 /home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/controller/VenueController.java
 /home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/dto/ApiResponse.java
 /home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/dto/ErrorResponse.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/dto/EventDTO.java
+/home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/dto/EventDTOPath.java
 /home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/exception/GlobalExceptionHandler.java
 /home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/exception/ResourceNotFoundException.java
 /home/antonio/Desktop/modulo6_us/eventify/src/main/java/com/example/eventify/exception/ValidationException.java

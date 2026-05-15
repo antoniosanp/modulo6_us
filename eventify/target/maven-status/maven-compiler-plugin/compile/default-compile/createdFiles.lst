@@ -13,4 +13,3 @@ com/example/eventify/EventifyApplication.class
 com/example/eventify/dto/ApiResponse.class
 com/example/eventify/exception/GlobalExceptionHandler.class
 com/example/eventify/controller/EventController.class
-com/example/eventify/config/AppConfig.class

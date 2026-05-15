@@ -1,6 +1,7 @@
 package com.example.eventify.service;
 
 import com.example.eventify.dto.EventDTO;
+import com.example.eventify.dto.EventDTOPath;
 import com.example.eventify.exception.ResourceNotFoundException;
 import com.example.eventify.exception.ValidationException;
 import com.example.eventify.model.Event;
@@ -19,7 +20,7 @@ public class EventService {
     public Event addEvent(EventDTO eventDTO){
         Event e = eventRepository.findByName(eventDTO.getName());
 
-        if (e != null){throw new ValidationException("test");}
+        if (e != null){throw new ValidationException("error");}
         Event eNew = new Event();
         eNew.setName(eventDTO.getName());
         eNew.setEventDate(eventDTO.getEventDate());
@@ -48,6 +49,28 @@ public class EventService {
         
     }
 
+    public Event patchEvent(Integer id, EventDTOPath eventDTOPath){
+        Event e = eventRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("no hay evento con ese id"));
 
+        if (eventDTOPath.getName() != null) {e.setName(eventDTOPath.getName());}
+        if (eventDTOPath.getEventDate() != null) {e.setEventDate(eventDTOPath.getEventDate());}
+        if (eventDTOPath.getDescription() != null) {e.setDescription(eventDTOPath.getDescription());}
+        eventRepository.save(e);
+
+        return  e;
+    }
+
+    public Event putEvent(Integer id, EventDTO eventDTO){
+
+        Event e = eventRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("no hay evento con ese id"));
+
+        if (eventDTO.getName() != null) {e.setName(eventDTO.getName());}
+        if (eventDTO.getEventDate() != null) {e.setEventDate(eventDTO.getEventDate());}
+        if (eventDTO.getDescription() != null) {e.setDescription(eventDTO.getDescription());}
+        eventRepository.save(e);
+
+        return  e;
+
+    }
 
 }

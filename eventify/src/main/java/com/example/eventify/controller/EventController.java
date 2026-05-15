@@ -1,8 +1,10 @@
 package com.example.eventify.controller;
 
 import com.example.eventify.dto.EventDTO;
+import com.example.eventify.dto.EventDTOPath;
 import com.example.eventify.model.Event;
 import com.example.eventify.service.EventService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +26,10 @@ public class EventController {
     }
 
     @PostMapping()
-    public ResponseEntity<Event> createEvent(@RequestBody EventDTO eventDTO){
-        if(eventService.addEvent(eventDTO) != null)  return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Event> createEvent(@Valid @RequestBody EventDTO eventDTO){
+        Event event = eventService.addEvent(eventDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(event);
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).build();
 
     }
 
@@ -44,7 +46,20 @@ public class EventController {
         return ResponseEntity.ok(e);
 
 
+    }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Event> parcialUpdate(@PathVariable Integer id, @RequestBody EventDTOPath eventDTOPath){
+        Event e = eventService.patchEvent(id,eventDTOPath);
+
+        return ResponseEntity.ok(e);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Event> uptade(@PathVariable Integer id, @Valid @RequestBody EventDTO eventDTO){
+        Event e = eventService.putEvent(id, eventDTO);
+
+        return ResponseEntity.ok(e);
     }
 
 
