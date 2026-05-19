@@ -3,6 +3,7 @@
 /home/cohorte6/Documents/javathings/modulo6_us/eventify/src/main/java/com/example/eventify/config/SwaggerConfig.java
 /home/cohorte6/Documents/javathings/modulo6_us/eventify/src/main/java/com/example/eventify/controller/EventController.java
 /home/cohorte6/Documents/javathings/modulo6_us/eventify/src/main/java/com/example/eventify/controller/VenueController.java
+/home/cohorte6/Documents/javathings/modulo6_us/eventify/src/main/java/com/example/eventify/controller/ui/EventUIController.java
 /home/cohorte6/Documents/javathings/modulo6_us/eventify/src/main/java/com/example/eventify/dto/ApiResponse.java
 /home/cohorte6/Documents/javathings/modulo6_us/eventify/src/main/java/com/example/eventify/dto/ErrorResponse.java
 /home/cohorte6/Documents/javathings/modulo6_us/eventify/src/main/java/com/example/eventify/dto/EventDTO.java

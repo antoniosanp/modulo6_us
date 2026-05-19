@@ -1,4 +1,5 @@
 com/example/eventify/repository/EventRepository.class
+com/example/eventify/dto/EventDTOPath.class
 com/example/eventify/service/VenueService.class
 com/example/eventify/config/SwaggerConfig.class
 com/example/eventify/service/EventService.class
@@ -8,7 +9,11 @@ com/example/eventify/model/Event.class
 com/example/eventify/exception/ValidationException.class
 com/example/eventify/model/Venue.class
 com/example/eventify/dto/ErrorResponse.class
+com/example/eventify/controller/VenueController.class
 com/example/eventify/EventifyApplication.class
+com/example/eventify/dto/EventDTO.class
 com/example/eventify/dto/ApiResponse.class
 com/example/eventify/exception/GlobalExceptionHandler.class
+com/example/eventify/controller/ui/EventUIController.class
+com/example/eventify/dto/VenueDTO.class
 com/example/eventify/controller/EventController.class
