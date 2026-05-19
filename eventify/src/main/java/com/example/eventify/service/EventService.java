@@ -7,6 +7,8 @@ import com.example.eventify.exception.ValidationException;
 import com.example.eventify.model.Event;
 import com.example.eventify.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,8 +32,8 @@ public class EventService {
         return eventRepository.save(eNew);
     }
 
-    public List<Event> getAllEvents(){
-        List<Event> l = eventRepository.findAll();
+    public Page<Event> getAllEvents(Pageable pageable){
+        Page<Event> l = eventRepository.findAll(pageable);
         if (l.isEmpty()){throw new ResourceNotFoundException("no hay eventos");
         }
 

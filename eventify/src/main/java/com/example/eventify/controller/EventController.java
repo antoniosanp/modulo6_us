@@ -6,6 +6,9 @@ import com.example.eventify.model.Event;
 import com.example.eventify.service.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +22,13 @@ public class EventController {
 
     private final EventService eventService;
 
-    @GetMapping()
-    public ResponseEntity<List<Event>> getAllEventos(){
+    @GetMapping
+    public ResponseEntity<Page<Event>> getAllEventos(
+            @PageableDefault(size = 10, sort = "name") Pageable pageable){
 
-        return ResponseEntity.ok().body(eventService.getAllEvents());
+        return ResponseEntity.ok(
+                eventService.getAllEvents(pageable)
+        );
     }
 
     @PostMapping()
