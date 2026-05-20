@@ -16,6 +16,11 @@
 
 <h1 th:text="${tituloPantalla}">Lista de Libros</h1>
 
+
+<div style="margin-bottom: 20px;">
+    <a th:href="@{/eventos/nuevo}" style="padding: 10px; background-color: #008CBA; color: white; text-decoration: none;">+ Agregar Nuevo Libro</a>
+</div>
+
 <!-- th:if evalúa si la lista está vacía -->
 <div th:if="${#lists.isEmpty(eventos)}" class="empty-state">
     <p>No hay eventos registrados en el sistema actualmente.</p>
@@ -33,13 +38,44 @@
     </thead>
     <tbody>
     <!-- th:each itera sobre la colección ${libros} -->
-    <tr th:each="evento : ${eventos}">
+    <tr th:each="evento : ${eventos.content}">
         <td th:text="${evento.id}">1</td>
         <td th:text="${evento.name}">El Quijote</td>
         <td th:text="${evento.eventDate}">Cervantes</td>
         <td th:text="${evento.description}">123-456</td>
 
     </tr>
+
+    <div class="pagination">
+
+        <!-- Botón Anterior -->
+        <a th:if="${eventos.hasPrevious()}"
+           th:href="@{/eventos/list(page=${eventos.number - 1}, size=${eventos.size})}">
+            Anterior
+        </a>
+
+        <!-- Números de página -->
+        <span th:each="i : ${#numbers.sequence(0, eventos.totalPages - 1)}">
+
+        <a th:if="${i != eventos.number}"
+           th:href="@{/eventos/list(page=${i}, size=${eventos.size})}"
+           th:text="${i + 1}">
+        </a>
+
+        <span th:if="${i == eventos.number}"
+              th:text="${i + 1}"
+              style="font-weight:bold">
+        </span>
+
+    </span>
+
+        <!-- Botón Siguiente -->
+        <a th:if="${eventos.hasNext()}"
+           th:href="@{/eventos/list(page=${eventos.number + 1}, size=${eventos.size})}">
+            Siguiente
+        </a>
+
+    </div>
     </tbody>
 </table>
 
