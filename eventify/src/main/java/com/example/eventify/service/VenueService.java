@@ -1,14 +1,15 @@
 package com.example.eventify.service;
 
 import com.example.eventify.dto.VenueDTO;
+import com.example.eventify.dto.VenueDTOPath;
 import com.example.eventify.exception.ResourceNotFoundException;
 import com.example.eventify.exception.ValidationException;
 import com.example.eventify.model.Venue;
 import com.example.eventify.repository.VenueRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -16,81 +17,66 @@ public class VenueService {
 
     private final VenueRepository venueRepository;
 
-    // GET
-    public List<Venue> getAllVenues() {
-        List<Venue> venues = venueRepository.findAll();
-        if (venues.isEmpty()) {
-            throw new ResourceNotFoundException("no hay venues");
-        }
-        return venues;
+    public Page<Venue> getAllVenues(Pageable pageable) {
+        return venueRepository.findAll(pageable);
     }
 
-    public Venue getVenueById(int id) {
+    public Venue getVenueById(Integer id) {
         return venueRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("no hay venue con ese id"));
+                .orElseThrow(() -> new ResourceNotFoundException("No hay venue con ese id"));
     }
 
-    // POST
     public Venue addVenue(VenueDTO venueDTO) {
-        Venue existing = venueRepository.findByAddress(venueDTO.getAddress());
-        if (existing != null) {
-            throw new ValidationException("Ya hay un venue con esta dirección");
-        }
+        validateUniqueAddress(venueDTO.getAddress(), null);
 
-        Venue v = new Venue();
-        v.setName(venueDTO.getName());
-        v.setAddress(venueDTO.getAddress());
-        v.setMaxCapacity(venueDTO.getMaxCapacity());
-        return venueRepository.save(v);
+        Venue venue = new Venue();
+        venue.setName(venueDTO.getName());
+        venue.setAddress(venueDTO.getAddress());
+        venue.setMaxCapacity(venueDTO.getMaxCapacity());
+        return venueRepository.save(venue);
     }
 
-    // PATCH
-    public Venue patchVenue(int id, VenueDTO venueDTO) {
-        Venue v = getVenueById(id);
+    public Venue patchVenue(Integer id, VenueDTOPath venueDTOPath) {
+        Venue venue = getVenueById(id);
 
-        if (venueDTO.getName() != null) {
-            v.setName(venueDTO.getName());
+        if (venueDTOPath.getName() != null) {
+            venue.setName(venueDTOPath.getName());
         }
-        if (venueDTO.getAddress() != null) {
-            Venue byAddress = venueRepository.findByAddress(venueDTO.getAddress());
-            if (byAddress != null && !byAddress.getId().equals(id)) {
-                throw new ValidationException("Ya hay un venue con esta dirección");
-            }
-            v.setAddress(venueDTO.getAddress());
+        if (venueDTOPath.getAddress() != null) {
+            validateUniqueAddress(venueDTOPath.getAddress(), id);
+            venue.setAddress(venueDTOPath.getAddress());
         }
-        // maxCapacity es int. Si llega en el body con valor >= 0, lo aplicamos.
-        if (venueDTO.getMaxCapacity() >= 0) {
-            v.setMaxCapacity(venueDTO.getMaxCapacity());
+        if (venueDTOPath.getMaxCapacity() != null) {
+            venue.setMaxCapacity(venueDTOPath.getMaxCapacity());
         }
 
-        return venueRepository.save(v);
+        return venueRepository.save(venue);
     }
 
-    // PUT
-    public Venue putVenue(int id, VenueDTO venueDTO) {
-        Venue v = getVenueById(id);
+    public Venue putVenue(Integer id, VenueDTO venueDTO) {
+        Venue venue = getVenueById(id);
+        validateUniqueAddress(venueDTO.getAddress(), id);
 
-        Venue byAddress = venueRepository.findByAddress(venueDTO.getAddress());
-        if (byAddress != null && !byAddress.getId().equals(id)) {
-            throw new ValidationException("Ya hay un venue con esta dirección");
-        }
+        venue.setName(venueDTO.getName());
+        venue.setAddress(venueDTO.getAddress());
+        venue.setMaxCapacity(venueDTO.getMaxCapacity());
 
-        v.setName(venueDTO.getName());
-        v.setAddress(venueDTO.getAddress());
-        v.setMaxCapacity(venueDTO.getMaxCapacity());
-
-        return venueRepository.save(v);
+        return venueRepository.save(venue);
     }
 
-    // DELETE
     public void deleteAllVenues() {
         venueRepository.deleteAll();
     }
 
-    public void deleteVenueById(int id) {
-        Venue v = getVenueById(id);
-        venueRepository.delete(v);
+    public void deleteVenueById(Integer id) {
+        Venue venue = getVenueById(id);
+        venueRepository.delete(venue);
+    }
+
+    private void validateUniqueAddress(String address, Integer currentId) {
+        Venue existing = venueRepository.findByAddress(address);
+        if (existing != null && !existing.getId().equals(currentId)) {
+            throw new ValidationException("Ya hay un venue con esta direccion");
+        }
     }
 }
-
-

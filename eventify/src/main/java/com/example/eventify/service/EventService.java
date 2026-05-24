@@ -11,68 +11,73 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class EventService {
 
     private final EventRepository eventRepository;
 
-    public Event addEvent(EventDTO eventDTO){
-        Event e = eventRepository.findByName(eventDTO.getName());
-
-        if (e != null){throw new ValidationException("error");}
-        Event eNew = new Event();
-        eNew.setName(eventDTO.getName());
-        eNew.setEventDate(eventDTO.getEventDate());
-        eNew.setDescription(eventDTO.getDescription());
-
-
-        return eventRepository.save(eNew);
+    public Page<Event> getAllEvents(Pageable pageable) {
+        return eventRepository.findAll(pageable);
     }
 
-    public Page<Event> getAllEvents(Pageable pageable){
-        Page<Event> l = eventRepository.findAll(pageable);
-        if (l.isEmpty()){throw new ResourceNotFoundException("no hay eventos");
+    public Event getEventById(Integer id) {
+        return eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No hay un evento con ese id"));
+    }
+
+    public Event addEvent(EventDTO eventDTO) {
+        validateUniqueName(eventDTO.getName(), null);
+
+        Event event = new Event();
+        event.setName(eventDTO.getName());
+        event.setEventDate(eventDTO.getEventDate());
+        event.setDescription(eventDTO.getDescription());
+
+        return eventRepository.save(event);
+    }
+
+    public Event patchEvent(Integer id, EventDTOPath eventDTOPath) {
+        Event event = getEventById(id);
+
+        if (eventDTOPath.getName() != null) {
+            validateUniqueName(eventDTOPath.getName(), id);
+            event.setName(eventDTOPath.getName());
+        }
+        if (eventDTOPath.getEventDate() != null) {
+            event.setEventDate(eventDTOPath.getEventDate());
+        }
+        if (eventDTOPath.getDescription() != null) {
+            event.setDescription(eventDTOPath.getDescription());
         }
 
-        return l;
+        return eventRepository.save(event);
     }
-    public void deleteAll(){
+
+    public Event putEvent(Integer id, EventDTO eventDTO) {
+        Event event = getEventById(id);
+        validateUniqueName(eventDTO.getName(), id);
+
+        event.setName(eventDTO.getName());
+        event.setEventDate(eventDTO.getEventDate());
+        event.setDescription(eventDTO.getDescription());
+
+        return eventRepository.save(event);
+    }
+
+    public void deleteAllEvents() {
         eventRepository.deleteAll();
     }
 
-    public Event getEventById(Integer id){
-        Event e = eventRepository.findById(id).orElse(null);
-
-        if (e == null) { throw new ResourceNotFoundException("no hay un evento con ese id");}
-        return e;
-        
+    public void deleteEventById(Integer id) {
+        Event event = getEventById(id);
+        eventRepository.delete(event);
     }
 
-    public Event patchEvent(Integer id, EventDTOPath eventDTOPath){
-        Event e = eventRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("no hay evento con ese id"));
-
-        if (eventDTOPath.getName() != null) {e.setName(eventDTOPath.getName());}
-        if (eventDTOPath.getEventDate() != null) {e.setEventDate(eventDTOPath.getEventDate());}
-        if (eventDTOPath.getDescription() != null) {e.setDescription(eventDTOPath.getDescription());}
-        eventRepository.save(e);
-
-        return  e;
+    private void validateUniqueName(String name, Integer currentId) {
+        Event existing = eventRepository.findByName(name);
+        if (existing != null && !existing.getId().equals(currentId)) {
+            throw new ValidationException("Ya hay un evento con este nombre");
+        }
     }
-
-    public Event putEvent(Integer id, EventDTO eventDTO){
-
-        Event e = eventRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("no hay evento con ese id"));
-
-        if (eventDTO.getName() != null) {e.setName(eventDTO.getName());}
-        if (eventDTO.getEventDate() != null) {e.setEventDate(eventDTO.getEventDate());}
-        if (eventDTO.getDescription() != null) {e.setDescription(eventDTO.getDescription());}
-        eventRepository.save(e);
-
-        return  e;
-
-    }
-
 }

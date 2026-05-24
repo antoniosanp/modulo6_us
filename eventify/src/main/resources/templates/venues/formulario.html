@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${title}">Registrar evento</title>
+    <title th:text="${title}">Registrar venue</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; }
         .form-group { margin-bottom: 15px; }
@@ -13,29 +13,29 @@
     </style>
 </head>
 <body>
-<h1 th:text="${title}">Registrar evento</h1>
+<h1 th:text="${title}">Registrar venue</h1>
 
 <a th:href="@{/ui}">Volver al inicio</a>
 
-<form th:action="@{/ui/events}" th:object="${event}" method="post">
+<form th:action="@{/ui/venues}" th:object="${venue}" method="post">
     <div class="form-group">
         <label for="name">Nombre</label>
         <input type="text" th:field="*{name}" required>
     </div>
 
     <div class="form-group">
-        <label for="eventDate">Fecha</label>
-        <input type="date" th:field="*{eventDate}" required>
+        <label for="address">Direccion</label>
+        <input type="text" th:field="*{address}" required>
     </div>
 
     <div class="form-group">
-        <label for="description">Descripcion</label>
-        <input type="text" th:field="*{description}" required>
+        <label for="maxCapacity">Capacidad maxima</label>
+        <input type="number" min="0" th:field="*{maxCapacity}" required>
     </div>
 
     <div class="actions">
         <button type="submit">Guardar</button>
-        <a th:href="@{/ui/events}">Ver eventos</a>
+        <a th:href="@{/ui/venues}">Ver venues</a>
     </div>
 </form>
 </body>

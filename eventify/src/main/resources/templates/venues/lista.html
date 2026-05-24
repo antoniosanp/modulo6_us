@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${title}">Listado de eventos</title>
+    <title th:text="${title}">Listado de venues</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
@@ -14,15 +14,15 @@
     </style>
 </head>
 <body>
-<h1 th:text="${title}">Listado de eventos</h1>
+<h1 th:text="${title}">Listado de venues</h1>
 
 <div class="actions">
     <a th:href="@{/ui}">Volver al inicio</a>
-    <a th:href="@{/ui/events/new}">Nuevo evento</a>
+    <a th:href="@{/ui/venues/new}">Nuevo venue</a>
 </div>
 
 <div th:if="${page.isEmpty()}" class="empty-state">
-    No hay eventos registrados.
+    No hay venues registrados.
 </div>
 
 <table th:unless="${page.isEmpty()}">
@@ -30,29 +30,29 @@
     <tr>
         <th>ID</th>
         <th>Nombre</th>
-        <th>Fecha</th>
-        <th>Descripcion</th>
+        <th>Direccion</th>
+        <th>Capacidad maxima</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="event : ${page.content}">
-        <td th:text="${event.id}">1</td>
-        <td th:text="${event.name}">Evento</td>
-        <td th:text="${event.eventDate}">2026-05-24</td>
-        <td th:text="${event.description}">Descripcion</td>
+    <tr th:each="venue : ${page.content}">
+        <td th:text="${venue.id}">1</td>
+        <td th:text="${venue.name}">Venue</td>
+        <td th:text="${venue.address}">Direccion</td>
+        <td th:text="${venue.maxCapacity}">100</td>
     </tr>
     </tbody>
 </table>
 
 <div class="pagination" th:if="${page.totalPages > 1}">
     <a th:if="${page.hasPrevious()}"
-       th:href="@{/ui/events(page=${page.number - 1}, size=${page.size})}">
+       th:href="@{/ui/venues(page=${page.number - 1}, size=${page.size})}">
         Anterior
     </a>
 
     <span th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}">
         <a th:if="${i != page.number}"
-           th:href="@{/ui/events(page=${i}, size=${page.size})}"
+           th:href="@{/ui/venues(page=${i}, size=${page.size})}"
            th:text="${i + 1}">
             1
         </a>
@@ -60,7 +60,7 @@
     </span>
 
     <a th:if="${page.hasNext()}"
-       th:href="@{/ui/events(page=${page.number + 1}, size=${page.size})}">
+       th:href="@{/ui/venues(page=${page.number + 1}, size=${page.size})}">
         Siguiente
     </a>
 </div>

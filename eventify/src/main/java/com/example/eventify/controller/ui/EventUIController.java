@@ -1,6 +1,5 @@
 package com.example.eventify.controller.ui;
 
-
 import com.example.eventify.dto.EventDTO;
 import com.example.eventify.model.Event;
 import com.example.eventify.service.EventService;
@@ -12,40 +11,31 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/eventos")
+@RequestMapping("/ui/events")
 public class EventUIController {
 
     private final EventService eventService;
 
-    @GetMapping("/list")
-    public String listarEventosUI(Model model, @PageableDefault(size = 20) Pageable pageable){
-
-        Page<Event> eventos = eventService.getAllEvents(pageable);
-
-        model.addAttribute("eventos", eventos);
-        model.addAttribute("tituloPantalla", "lista de eventos");
-
+    @GetMapping
+    public String listEvents(Model model, @PageableDefault(size = 10, sort = "name") Pageable pageable) {
+        Page<Event> events = eventService.getAllEvents(pageable);
+        model.addAttribute("page", events);
+        model.addAttribute("title", "Listado de eventos");
         return "events/lista";
     }
 
-    @GetMapping("/nuevo")
-    public String mostrarFormularioEvento(Model model){
-
-        model.addAttribute("evento", new EventDTO());
-        model.addAttribute("tituloPantalla", "Registrar nuevo evento");
+    @GetMapping("/new")
+    public String showEventForm(Model model) {
+        model.addAttribute("event", new EventDTO());
+        model.addAttribute("title", "Registrar evento");
         return "events/formulario";
     }
 
-    @PostMapping("/guardar")
-    public String guardarEvento(@ModelAttribute("evento") EventDTO event){
-
-        eventService.addEvent(event);
-
-        return "redirect:/eventos/list";
+    @PostMapping
+    public String saveEvent(@ModelAttribute("event") EventDTO eventDTO) {
+        eventService.addEvent(eventDTO);
+        return "redirect:/ui/events";
     }
-
 }

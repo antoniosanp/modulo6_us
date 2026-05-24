@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Eventify UI</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        ul { line-height: 2; }
+    </style>
+</head>
+<body>
+<h1>Eventify</h1>
+
+<ul>
+    <li><a th:href="@{/ui/events}">Lista de eventos</a></li>
+    <li><a th:href="@{/ui/events/new}">Formulario de eventos</a></li>
+    <li><a th:href="@{/ui/venues}">Lista de venues</a></li>
+    <li><a th:href="@{/ui/venues/new}">Formulario de venues</a></li>
+</ul>
+</body>
+</html>
