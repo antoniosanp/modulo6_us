@@ -12,6 +12,8 @@ public class VenueDTOPath {
 
     private String address;
 
+    private String city;
+
     @Min(value = 0, message = "La capacidad maxima no puede ser negativa")
     private Integer maxCapacity;
 }

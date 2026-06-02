@@ -1,6 +1,7 @@
 package com.example.eventify.controller;
 
 import com.example.eventify.dto.ApiResponse;
+import com.example.eventify.dto.VenueDTO;
 import com.example.eventify.dto.VenueDTOPath;
 import com.example.eventify.model.Venue;
 import com.example.eventify.service.VenueService;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import com.example.eventify.dto.VenueDTO;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +31,7 @@ public class VenueController {
 
     private final VenueService venueService;
 
-    @Operation(summary = "Listar todos los venues", description = "Retorna el catalogo paginado de venues")
+    @Operation(summary = "Listar todos los venues", description = "Retorna el catalogo paginado de venues incluyendo la ciudad")
     @GetMapping
     public ResponseEntity<ApiResponse<Page<Venue>>> getAllVenues(
             @PageableDefault(size = 10, sort = "name") Pageable pageable) {
@@ -46,7 +46,7 @@ public class VenueController {
         return ResponseEntity.ok(ApiResponse.success("Venue encontrado correctamente", venue));
     }
 
-    @Operation(summary = "Registrar nuevo venue", description = "Crea un nuevo venue en memoria")
+    @Operation(summary = "Registrar nuevo venue", description = "Crea un nuevo venue persistido")
     @PostMapping
     public ResponseEntity<ApiResponse<Venue>> postVenue(@Valid @RequestBody VenueDTO venueDTO) {
         Venue savedVenue = venueService.addVenue(venueDTO);
@@ -54,21 +54,21 @@ public class VenueController {
                 .body(ApiResponse.success("Venue registrado correctamente", savedVenue));
     }
 
-    @Operation(summary = "Actualizar parcialmente un venue", description = "Actualiza nombre/dirección/capacidad si viene en el body")
+    @Operation(summary = "Actualizar parcialmente un venue", description = "Actualiza nombre, ciudad, direccion o capacidad si viene en el body")
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<Venue>> patchVenue(@PathVariable Integer id, @RequestBody VenueDTOPath venueDTOPath) {
         Venue updated = venueService.patchVenue(id, venueDTOPath);
         return ResponseEntity.ok(ApiResponse.success("Venue actualizado correctamente", updated));
     }
 
-    @Operation(summary = "Reemplazar un venue", description = "Actualiza completamente un venue")
+    @Operation(summary = "Reemplazar un venue", description = "Actualiza completamente un venue incluyendo la ciudad")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Venue>> putVenue(@PathVariable Integer id, @Valid @RequestBody VenueDTO venueDTO) {
         Venue updated = venueService.putVenue(id, venueDTO);
         return ResponseEntity.ok(ApiResponse.success("Venue actualizado correctamente", updated));
     }
 
-    @Operation(summary = "Eliminar todos los venues", description = "Borra el catalogo completo de venues")
+    @Operation(summary = "Eliminar todos los venues", description = "Elimina fisicamente los venues")
     @DeleteMapping
     public ResponseEntity<ApiResponse<Void>> deleteAllVenues() {
         venueService.deleteAllVenues();
@@ -82,4 +82,3 @@ public class VenueController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success("Venue eliminado correctamente", null));
     }
 }
-

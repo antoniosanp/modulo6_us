@@ -14,6 +14,9 @@ public class VenueDTO {
     @NotBlank(message = "La direccion del venue es obligatoria")
     private String address;
 
+    @NotBlank(message = "La ciudad del venue es obligatoria")
+    private String city;
+
     @NotNull(message = "La capacidad maxima es obligatoria")
     @Min(value = 0, message = "La capacidad maxima no puede ser negativa")
     private Integer maxCapacity;

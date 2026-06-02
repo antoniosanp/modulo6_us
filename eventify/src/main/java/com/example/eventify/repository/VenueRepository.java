@@ -4,10 +4,13 @@ import com.example.eventify.model.Venue;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
 @Repository
 public interface VenueRepository extends JpaRepository<Venue, Integer> {
 
-    Venue findByName(String name);
+    Optional<Venue> findByNameIgnoreCase(String name);
 
-    Venue findByAddress(String address);
+    Optional<Venue> findByAddressIgnoreCase(String address);
 }

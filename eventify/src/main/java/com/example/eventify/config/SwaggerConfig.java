@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(
                 title = "API de Gestión de Eventify",
                 version = "1.0",
-                description = "Documentación detallada de los endpoints para la gestión de eventos y lugares.",
+                description = "Documentacion de eventos, venues y catalogos relacionales con filtros, records y borrado logico.",
                 contact = @Contact(name = "Soporte Riwi", email = "soporte@riwi.io")
         )
 )

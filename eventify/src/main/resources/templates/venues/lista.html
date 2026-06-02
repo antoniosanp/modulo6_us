@@ -28,16 +28,16 @@
 <table th:unless="${page.isEmpty()}">
     <thead>
     <tr>
-        <th>ID</th>
         <th>Nombre</th>
+        <th>Ciudad</th>
         <th>Direccion</th>
         <th>Capacidad maxima</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="venue : ${page.content}">
-        <td th:text="${venue.id}">1</td>
         <td th:text="${venue.name}">Venue</td>
+        <td th:text="${venue.city}">Ciudad</td>
         <td th:text="${venue.address}">Direccion</td>
         <td th:text="${venue.maxCapacity}">100</td>
     </tr>

@@ -3,17 +3,23 @@ package com.example.eventify.controller;
 import com.example.eventify.dto.ApiResponse;
 import com.example.eventify.dto.EventDTO;
 import com.example.eventify.dto.EventDTOPath;
+import com.example.eventify.dto.EventSummaryDTO;
 import com.example.eventify.model.Event;
 import com.example.eventify.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/events")
@@ -22,11 +28,26 @@ public class EventController {
 
     private final EventService eventService;
 
-    @Operation(summary = "Listar todos los eventos", description = "Retorna el catalogo paginado de eventos")
+    @Operation(
+            summary = "Listar eventos",
+            description = "Retorna un slice con eventos resumidos, filtrado por ciudad, categoria, capacidad y rango de fechas."
+    )
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<Event>>> getAllEvents(
-            @PageableDefault(size = 10, sort = "name") Pageable pageable) {
-        Page<Event> events = eventService.getAllEvents(pageable);
+    public ResponseEntity<ApiResponse<Slice<EventSummaryDTO>>> getAllEvents(
+            @Parameter(description = "Filtro parcial e insensible a mayusculas por ciudad")
+            @RequestParam(required = false) String city,
+            @Parameter(description = "Filtro parcial e insensible a mayusculas por categoria")
+            @RequestParam(required = false) String category,
+            @Parameter(description = "Capacidad minima del venue asociado")
+            @RequestParam(required = false) Integer minCapacity,
+            @Parameter(description = "Fecha inicial del rango", example = "2026-01-01")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @RequestParam(required = false) LocalDate fromDate,
+            @Parameter(description = "Fecha final del rango", example = "2026-12-31")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @RequestParam(required = false) LocalDate toDate,
+            @PageableDefault(size = 20, sort = "eventDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        Slice<EventSummaryDTO> events = eventService.searchEvents(city, category, minCapacity, fromDate, toDate, pageable);
         return ResponseEntity.ok(ApiResponse.success("Eventos consultados correctamente", events));
     }
 
@@ -61,7 +82,7 @@ public class EventController {
         return ResponseEntity.ok(ApiResponse.success("Evento actualizado correctamente", event));
     }
 
-    @Operation(summary = "Eliminar todos los eventos", description = "Borra el catalogo completo de eventos")
+    @Operation(summary = "Eliminar todos los eventos", description = "Aplica borrado logico a todo el catalogo de eventos")
     @DeleteMapping()
     public ResponseEntity<ApiResponse<Void>> deleteAllEvents() {
         eventService.deleteAllEvents();
@@ -69,7 +90,7 @@ public class EventController {
                 .body(ApiResponse.success("Eventos eliminados correctamente", null));
     }
 
-    @Operation(summary = "Eliminar un evento por id")
+    @Operation(summary = "Eliminar un evento por id", description = "Aplica borrado logico; el registro queda inactivo y no aparece en consultas")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteEventById(@PathVariable Integer id) {
         eventService.deleteEventById(id);
